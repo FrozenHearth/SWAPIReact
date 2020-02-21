@@ -26,7 +26,7 @@ const styles = {
     transition: 'all 0.3s cubic-bezier(.25,.8,.25,1)'
   },
   learnMoreBtn: {
-    margin: '0 auto',
+    margin: '0 auto 2em auto',
     padding: '1em'
   },
   personsCardContent: {
@@ -39,6 +39,9 @@ const styles = {
   },
   personWeight: {
     margin: '0 0 0.5em 0'
+  },
+  buttonLink: {
+    textDecoration: 'none'
   }
 };
 
@@ -95,6 +98,7 @@ class Persons extends Component {
                     </Typography>
                   </CardContent>
                   <Link
+                    className={classes.buttonLink}
                     to={`/persons/${person.url
                       .split('/')
                       .slice(-2)
@@ -106,7 +110,7 @@ class Persons extends Component {
                         className={classes.learnMoreBtn}
                         size="small"
                       >
-                        Learn More
+                        View Details
                       </Button>
                     </CardActions>
                   </Link>
