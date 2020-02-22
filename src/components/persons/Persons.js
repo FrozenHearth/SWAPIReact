@@ -4,7 +4,10 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import Skeleton from '@material-ui/lab/Skeleton';
+import Box from '@material-ui/core/Box';
 import Header from '../common/Header';
+
 import { Link } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import { bindActionCreators } from 'redux';
@@ -12,6 +15,7 @@ import { connect } from 'react-redux';
 import { actionGetAllPeople } from './actions/personActions';
 
 import '../../styles/Persons/persons.css';
+import SkeletonScreens from './skeletonScreens/SkeletonScreens';
 
 const styles = {
   cardBg: {
@@ -52,6 +56,7 @@ class Persons extends Component {
       people: []
     };
   }
+
   componentDidMount() {
     this.props.actionGetAllPeople().then(res => {
       this.setState({
@@ -69,54 +74,56 @@ class Persons extends Component {
       <>
         <Header />
         <div className="card-container">
-          {people.length
-            ? people.map((person, index) => (
-                <Card
-                  className={`${classes.cardBg} card-hover`}
-                  key={index}
-                  variant="outlined"
-                >
-                  <CardContent className={classes.personsCardContent}>
-                    <Typography color="textSecondary" gutterBottom>
-                      <span> {person.name}</span>
-                    </Typography>
-                    <Typography
-                      className={classes.personHeight}
-                      variant="h6"
-                      component="h2"
-                    >
-                      {person.height} cm
-                    </Typography>
-                    <Typography
-                      className={classes.personWeight}
-                      color="textSecondary"
-                    >
-                      {person.mass} kg
-                    </Typography>
-                    <Typography variant="body2" component="p">
-                      {person.birth_year}
-                    </Typography>
-                  </CardContent>
-                  <Link
-                    className={classes.buttonLink}
-                    to={`/persons/${person.url
-                      .split('/')
-                      .slice(-2)
-                      .join('/')}`}
+          {people.length ? (
+            people.map((person, index) => (
+              <Card
+                className={`${classes.cardBg} card-hover`}
+                key={index}
+                variant="outlined"
+              >
+                <CardContent className={classes.personsCardContent}>
+                  <Typography color="textSecondary" gutterBottom>
+                    <span> {person.name}</span>
+                  </Typography>
+                  <Typography
+                    className={classes.personHeight}
+                    variant="h6"
+                    component="h2"
                   >
-                    <CardActions>
-                      <Button
-                        onClick={this.redirectToPersonDetails}
-                        className={classes.learnMoreBtn}
-                        size="small"
-                      >
-                        View Details
-                      </Button>
-                    </CardActions>
-                  </Link>
-                </Card>
-              ))
-            : ''}
+                    {person.height} cm
+                  </Typography>
+                  <Typography
+                    className={classes.personWeight}
+                    color="textSecondary"
+                  >
+                    {person.mass} kg
+                  </Typography>
+                  <Typography variant="body2" component="p">
+                    {person.birth_year}
+                  </Typography>
+                </CardContent>
+                <Link
+                  className={classes.buttonLink}
+                  to={`/persons/${person.url
+                    .split('/')
+                    .slice(-2)
+                    .join('/')}`}
+                >
+                  <CardActions>
+                    <Button
+                      onClick={this.redirectToPersonDetails}
+                      className={classes.learnMoreBtn}
+                      size="small"
+                    >
+                      View Details
+                    </Button>
+                  </CardActions>
+                </Link>
+              </Card>
+            ))
+          ) : (
+            <SkeletonScreens />
+          )}
         </div>
       </>
     );
