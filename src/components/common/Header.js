@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import InputBase from '@material-ui/core/InputBase';
-import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
+import Debounce from 'react-debounce-component';
 import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
+import axios from 'axios';
+import SearchDropDown from '../searchDropDown/searchDropDown';
 import '../../styles/Header/header.css';
 
 const styles = {
@@ -29,14 +30,30 @@ const styles = {
 };
 
 class Header extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      searchTerm: '',
+      searchResults: []
+    };
+  }
+  handleChange = e => {
+    const { name, value } = e.target;
+    this.setState({
+      [name]: value
+    });
+    axios.get(`https://swapi.co/api/people/?search=${value}`).then(res => {
+      this.setState({
+        searchResults: res.data.results
+      });
+    });
+  };
   render() {
     const { classes } = this.props;
+    const { searchTerm, searchResults } = this.state;
     return (
       <AppBar className={classes.appBarColor} position="static">
         <Toolbar>
-          {/* <IconButton edge="start" color="inherit" aria-label="open drawer">
-            <MenuIcon />
-          </IconButton> */}
           <Typography variant="h6" className={classes.banner} noWrap>
             Star Wars
           </Typography>
@@ -45,11 +62,22 @@ class Header extends Component {
               <SearchIcon />
             </div>
             <InputBase
+              name="searchTerm"
+              autoComplete="off"
+              onChange={this.handleChange}
               className={`${classes.searchBar} search-input`}
-              placeholder="Search…"
+              placeholder="Search for people…"
               inputProps={{ 'aria-label': 'search' }}
+              value={searchTerm}
             />
           </div>
+          {searchTerm !== '' ? (
+            <Debounce ms={1000}>
+              <SearchDropDown searchResults={searchResults} />
+            </Debounce>
+          ) : (
+            ''
+          )}
         </Toolbar>
       </AppBar>
     );
