@@ -1,48 +1,55 @@
 import React, { Component } from 'react';
 import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import Skeleton from '@material-ui/lab/Skeleton';
-import Box from '@material-ui/core/Box';
+import SkeletonScreens from './skeletonScreens/SkeletonScreens';
 import Header from '../common/Header';
-
 import { Link } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { actionGetAllPeople } from './actions/personActions';
-
 import '../../styles/Persons/persons.css';
-import SkeletonScreens from './skeletonScreens/SkeletonScreens';
 
 const styles = {
   cardBg: {
-    height: '200px',
+    height: 'auto',
     border: 'none',
     cursor: 'pointer',
-    width: '20%',
-    padding: '1.5em',
-    background: '#fafafa',
-    margin: '0 2em 2em 2em',
+    width: '21%',
+    padding: '1.5em 0 0 0',
+    background: '#fefefe',
+    margin: '0 2em 3em 2em',
     boxShadow: '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)',
     transition: 'all 0.3s cubic-bezier(.25,.8,.25,1)'
   },
-  learnMoreBtn: {
-    margin: '0 auto 2em auto',
-    padding: '1em'
-  },
+
   personsCardContent: {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center'
+  },
+  personName: {
+    color: '#ed4b6f',
+    textShadow: '0 1px 0 #ccc'
   },
   personHeight: {
     margin: '0.5em 0 0.5em 0'
   },
   personWeight: {
     margin: '0 0 0.5em 0'
+  },
+  learnMoreBtn: {
+    padding: '1em',
+    background: '#ed4b6f',
+    color: 'white',
+    fontWeight: '700',
+    fontSize: '0.9em',
+    width: '100%',
+    '&:hover': {
+      background: 'rgba(237,75,111,0.8)'
+    }
   },
   buttonLink: {
     textDecoration: 'none'
@@ -82,13 +89,19 @@ class Persons extends Component {
                 variant="outlined"
               >
                 <CardContent className={classes.personsCardContent}>
-                  <Typography color="textSecondary" gutterBottom>
-                    <span> {person.name}</span>
+                  <Typography
+                    variant="h5"
+                    component="h2"
+                    color="textPrimary"
+                    gutterBottom
+                    className={classes.personName}
+                  >
+                    {person.name}
                   </Typography>
                   <Typography
+                    color="textSecondary"
                     className={classes.personHeight}
-                    variant="h6"
-                    component="h2"
+                    component="span"
                   >
                     {person.height} cm
                   </Typography>
@@ -109,15 +122,13 @@ class Persons extends Component {
                     .slice(-2)
                     .join('/')}`}
                 >
-                  <CardActions>
-                    <Button
-                      onClick={this.redirectToPersonDetails}
-                      className={classes.learnMoreBtn}
-                      size="small"
-                    >
-                      View Details
-                    </Button>
-                  </CardActions>
+                  <Button
+                    onClick={this.redirectToPersonDetails}
+                    className={classes.learnMoreBtn}
+                    size="small"
+                  >
+                    View Details
+                  </Button>
                 </Link>
               </Card>
             ))
