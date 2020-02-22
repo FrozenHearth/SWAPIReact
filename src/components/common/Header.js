@@ -6,7 +6,6 @@ import InputBase from '@material-ui/core/InputBase';
 import SearchIcon from '@material-ui/icons/Search';
 import Debounce from 'react-debounce-component';
 import { withStyles } from '@material-ui/core/styles';
-import { connect } from 'react-redux';
 import axios from 'axios';
 import SearchDropDown from '../searchDropDown/searchDropDown';
 import '../../styles/Header/header.css';
@@ -84,10 +83,4 @@ class Header extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    peopleResults: state.personsList.data.results || []
-  };
-};
-
-export default connect(mapStateToProps, null)(withStyles(styles)(Header));
+export default withStyles(styles)(Header);
