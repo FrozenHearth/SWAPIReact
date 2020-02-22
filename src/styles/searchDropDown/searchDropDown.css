@@ -1,0 +1,17 @@
+.search-results-container {
+  width: 23.7%;
+  top: 3.5em;
+  left: 34em;
+  border-radius: 4px;
+  min-height: 50px;
+  max-height: 300px;
+  display: inline-block;
+  position: absolute;
+  z-index: 100;
+  overflow: auto;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+}
+
+.none {
+  display: none;
+}
