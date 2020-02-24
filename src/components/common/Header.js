@@ -9,6 +9,7 @@ import { withStyles } from '@material-ui/core/styles';
 import axios from 'axios';
 import SearchDropDown from '../searchDropDown/searchDropDown';
 import '../../styles/Header/header.css';
+import { base_URL } from '../../constants/index';
 
 const styles = {
   searchBar: {
@@ -24,7 +25,8 @@ const styles = {
     background: '#404040'
   },
   banner: {
-    float: 'left'
+    float: 'left',
+    cursor: 'pointer'
   }
 };
 
@@ -41,11 +43,20 @@ class Header extends Component {
     this.setState({
       [name]: value
     });
-    axios.get(`https://swapi.co/api/people/?search=${value}`).then(res => {
+    axios.get(`${base_URL}/people/?search=${value}`).then(res => {
       this.setState({
         searchResults: res.data.results
       });
     });
+  };
+  goToHomePage = () => {
+    const { history, location } = this.props;
+    if (location) {
+      history.push('/');
+      // Navigate to the homepage, only if not on the homepage. Otherwise, do nothing
+    } else {
+      return;
+    }
   };
   render() {
     const { classes } = this.props;
@@ -53,7 +64,12 @@ class Header extends Component {
     return (
       <AppBar className={classes.appBarColor} position="static">
         <Toolbar>
-          <Typography variant="h6" className={classes.banner} noWrap>
+          <Typography
+            onClick={this.goToHomePage}
+            variant="h6"
+            className={classes.banner}
+            noWrap
+          >
             Star Wars
           </Typography>
           <div className="search-box-container">
