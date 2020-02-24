@@ -1,1 +1,2 @@
 export const GET_ALL_PEOPLE = 'GET_ALL_PEOPLE';
+export const GET_PERSON_DETAILS = 'GET_PERSON_DETAILS';
