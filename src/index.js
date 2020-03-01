@@ -6,7 +6,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import store from './redux/store';
 import { Provider } from 'react-redux';
 import Persons from './components/persons/Persons';
-import PersonDetails from './components/persons/PersonDetails';
+import PersonDetails from './components/persons/person-details/PersonDetails';
 
 const rootElement = document.getElementById('root');
 
