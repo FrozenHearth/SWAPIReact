@@ -4,7 +4,10 @@ import {
   GET_CHARACTER_HOMEWORLD,
   GET_HOMEWORLD_FILMS,
   GET_HOMEWORLD_RESIDENTS,
-  GET_CHARACTER_FILMS
+  GET_CHARACTER_FILMS,
+  GET_CHARACTER_SPECIES,
+  GET_CHARACTER_VEHICLES,
+  GET_CHARACTER_STARSHIPS
 } from '../actionTypes/types';
 import axios from 'axios';
 import { base_URL } from '../../../constants/index';
@@ -47,6 +50,54 @@ export const actionGetCharacterFilms = films_featured => {
       const res = await axios.get(`${films_featured}`);
       dispatch({
         type: GET_CHARACTER_FILMS,
+        payload: res
+      });
+      return res.data;
+    } catch (err) {
+      console.log(err);
+      throw new Error(err);
+    }
+  };
+};
+
+export const actionGetCharacterSpecies = species => {
+  return async dispatch => {
+    try {
+      const res = await axios.get(`${species}`);
+      dispatch({
+        type: GET_CHARACTER_SPECIES,
+        payload: res
+      });
+      return res.data;
+    } catch (err) {
+      console.log(err);
+      throw new Error(err);
+    }
+  };
+};
+
+export const actionGetCharacterVehicles = vehicles => {
+  return async dispatch => {
+    try {
+      const res = await axios.get(`${vehicles}`);
+      dispatch({
+        type: GET_CHARACTER_VEHICLES,
+        payload: res
+      });
+      return res.data;
+    } catch (err) {
+      console.log(err);
+      throw new Error(err);
+    }
+  };
+};
+
+export const actionGetCharacterStarships = starships => {
+  return async dispatch => {
+    try {
+      const res = await axios.get(`${starships}`);
+      dispatch({
+        type: GET_CHARACTER_STARSHIPS,
         payload: res
       });
       return res.data;
