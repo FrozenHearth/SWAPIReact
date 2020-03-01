@@ -11,10 +11,3 @@
   /* background: #ececec !important; */
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23) !important;
 }
-
-.logo {
-  fill: #ed4b6f;
-  max-width: 450px;
-  max-height: 75px;
-  margin: 0 auto;
-}

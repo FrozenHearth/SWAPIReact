@@ -4,7 +4,7 @@ import PersonsList from './PersonsList';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { actionGetAllPeople } from './actions/personActions';
-import { ReactComponent as StarWarsLogo } from '../../assets/icons/logo.svg';
+import { Logo } from '../common/Logo';
 
 class Persons extends Component {
   _isMounted = false;
@@ -37,9 +37,7 @@ class Persons extends Component {
     return (
       <>
         <Header />
-        <div style={{ margin: '1em auto 0 auto', width: '500px' }}>
-          <StarWarsLogo className="logo" />
-        </div>
+        <Logo />
         <PersonsList people={people} />
       </>
     );
