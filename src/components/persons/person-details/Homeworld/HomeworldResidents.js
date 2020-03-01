@@ -7,7 +7,12 @@ export const HomeworldResidents = props => {
     <>
       {residents
         ? residents.map((item, index) => (
-            <Typography key={index} component="h2" variant="h5">
+            <Typography
+              key={index}
+              component="h2"
+              variant="h6"
+              color="textSecondary"
+            >
               <span> {item}</span>
             </Typography>
           ))

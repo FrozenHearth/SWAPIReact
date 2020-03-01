@@ -2,14 +2,32 @@ import React, { Component } from 'react';
 import Typography from '@material-ui/core/Typography';
 import { HomeworldFilms } from './HomeworldFilms';
 import { HomeworldResidents } from './HomeworldResidents';
+import Paper from '@material-ui/core/Paper';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import '../../../../styles/Persons/Homeworld/Homeworld.css';
 
 import {
   actionGetCharacterHomeworld,
   actionGetHomeworldFilms,
   actionGetHomeworldResidents
-} from '../actions/personActions';
+} from '../../actions/personActions';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { withStyles } from '@material-ui/core/styles';
+import { HomeworldDetails } from './HomeworldDetails';
+
+const styles = {
+  homeWorldTitle: {
+    color: '#ed4b6f'
+  },
+  tabContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    background: '#fefefe',
+    margin: '2em auto'
+  }
+};
 
 class Homeworld extends Component {
   state = {
@@ -18,7 +36,15 @@ class Homeworld extends Component {
     homeWorldClimate: '',
     homeWorldTerrain: '',
     homeWorldFilmsList: [],
-    homeworldResidentsList: []
+    homeworldResidentsList: [],
+    selectedTab: 'description'
+  };
+
+  handleTabClick = (_, clickedTabLabel) => {
+    if (clickedTabLabel)
+      this.setState({
+        selectedTab: clickedTabLabel
+      });
   };
 
   componentDidUpdate(prevProps) {
@@ -67,35 +93,67 @@ class Homeworld extends Component {
       homeWorldTerrain,
       homeWorldPopulation,
       homeWorldFilmsList,
-      homeworldResidentsList
+      homeworldResidentsList,
+      selectedTab
     } = this.state;
 
+    const { classes } = this.props;
+
     return (
-      <>
-        <Typography component="h2" variant="h4">
-          <span style={{ fontWeight: 'bold' }}>Homeworld:</span> {homeWorldName}
+      <div className="homeworld__container">
+        <Typography
+          className={classes.homeWorldTitle}
+          component="h2"
+          variant="h4"
+        >
+          {homeWorldName} (Homeworld)
         </Typography>
-        <Typography component="h2" variant="h5">
-          <span style={{ fontWeight: 'bold' }}>Population:</span>
-          {homeWorldPopulation}
-        </Typography>
-        <Typography component="h2" variant="h5">
-          <span style={{ fontWeight: 'bold' }}>Climate:</span>
-          {homeWorldClimate}
-        </Typography>
-        <Typography component="h2" variant="h5">
-          <span style={{ fontWeight: 'bold' }}>Terrain:</span>
-          {homeWorldTerrain}
-        </Typography>
-        <Typography component="h2" variant="h5">
-          <span style={{ fontWeight: 'bold' }}>Movies :</span>
+        <Paper className={classes.tabContainer} square>
+          <Tabs
+            value={selectedTab}
+            onChange={this.handleTabClick}
+            indicatorColor="secondary"
+          >
+            <Tab
+              className={`${selectedTab === 'description' ? 'active-tab' : ''}`}
+              value="description"
+              label="Description"
+            />
+            <Tab
+              className={`${selectedTab === 'movies' ? 'active-tab' : ''}`}
+              value="movies"
+              label="Movies"
+            />
+            <Tab
+              className={`${selectedTab === 'residents' ? 'active-tab' : ''}`}
+              value="residents"
+              label="Residents"
+            />
+          </Tabs>
+        </Paper>
+
+        {selectedTab === 'description' ? (
+          <HomeworldDetails
+            homeWorldClimate={homeWorldClimate}
+            homeWorldTerrain={homeWorldTerrain}
+            homeWorldPopulation={homeWorldPopulation}
+          />
+        ) : (
+          ''
+        )}
+
+        {selectedTab === 'movies' ? (
           <HomeworldFilms films={homeWorldFilmsList} />
-        </Typography>
-        <Typography component="h2" variant="h5">
-          <span style={{ fontWeight: 'bold' }}>Residents :</span>
+        ) : (
+          ''
+        )}
+
+        {selectedTab === 'residents' ? (
           <HomeworldResidents residents={homeworldResidentsList} />
-        </Typography>
-      </>
+        ) : (
+          ''
+        )}
+      </div>
     );
   }
 }
@@ -111,4 +169,4 @@ const mapDispatchToProps = dispatch => {
   );
 };
 
-export default connect(null, mapDispatchToProps)(Homeworld);
+export default connect(null, mapDispatchToProps)(withStyles(styles)(Homeworld));

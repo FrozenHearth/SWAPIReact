@@ -1,0 +1,11 @@
+.active-tab {
+  background: #ed4b6f !important;
+  color: white !important;
+  font-weight: 700 !important;
+}
+
+.container__header {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}

@@ -1,30 +1,47 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
 import Header from '../../common/Header';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import Divider from '@material-ui/core/Divider';
-import Homeworld from './Homeworld';
-import { CharacterFilms } from './CharacterFilms';
-import { Logo } from '../../common/Logo';
-import { bindActionCreators } from 'redux';
+import Homeworld from './Homeworld/Homeworld';
+import Paper from '@material-ui/core/Paper';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import CharacterDescription from './Character/CharacterDescription';
+import { CharacterFilms } from './Character/CharacterFilms';
+import { CharacterSpecies } from './Character/CharacterSpecies';
+import { CharacterVehicles } from './Character/CharacterVehicles';
+import { CharacterStarships } from './Character/CharacterStarships';
 import {
   actionGetPersonDetails,
-  actionGetCharacterFilms
+  actionGetCharacterFilms,
+  actionGetCharacterSpecies,
+  actionGetCharacterVehicles,
+  actionGetCharacterStarships
 } from '../actions/personActions';
-import { withStyles } from '@material-ui/core/styles';
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { withStyles } from '@material-ui/core/styles';
+import { Logo } from '../../common/Logo';
 import '../../../styles/Logo/logo.css';
+import '../../../styles/Persons/personDetails.css';
 
 const styles = {
   detailsContainer: {
     margin: '5em auto',
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'flex-start',
     height: 'auto',
     background: '#fefefe',
     boxShadow: '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)',
     transition: 'all 0.3s cubic-bezier(.25,.8,.25,1)'
+  },
+  tabContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    background: '#fefefe',
+    margin: '2em auto'
   },
   characterTitle: {
     color: '#ed4b6f',
@@ -41,21 +58,39 @@ class PersonDetails extends Component {
     super(props);
     this.state = {
       characterDetails: {},
+      selectedTab: 'description',
       characterHomeWorld: '',
       characterFilmsList: [],
+      characterVehiclesList: [],
+      characterSpeciesList: [],
+      characterStarshipsList: [],
       homeWorldResidents: {}
     };
   }
   componentDidMount() {
+    this.getCharacterDetails();
+  }
+
+  getCharacterDetails = () => {
     const { id } = this.props.match.params;
     this.props.actionGetPersonDetails(id).then(details => {
-      console.log(details);
+      const characterDetails = { ...details };
+      const {
+        films,
+        species,
+        vehicles,
+        homeworld,
+        starships
+      } = characterDetails;
       this.setState({
-        characterDetails: details,
-        characterHomeWorld: details.homeworld
+        characterDetails,
+        characterHomeWorld: homeworld
       });
-      const films = [...details.films];
-      let characterFilmsList = [];
+
+      let characterFilmsList = [],
+        characterSpeciesList = [],
+        characterVehiclesList = [],
+        characterStarshipsList = [];
 
       films.forEach(film => {
         this.props.actionGetCharacterFilms(film).then(res => {
@@ -65,96 +100,129 @@ class PersonDetails extends Component {
           });
         });
       });
+
+      species.forEach(item => {
+        this.props.actionGetCharacterSpecies(item).then(res => {
+          characterSpeciesList.push(res.name);
+          this.setState({
+            characterSpeciesList
+          });
+        });
+      });
+
+      vehicles.forEach(vehicle => {
+        this.props.actionGetCharacterVehicles(vehicle).then(res => {
+          characterVehiclesList.push(res.name);
+          this.setState({
+            characterVehiclesList
+          });
+        });
+      });
+
+      starships.forEach(vehicle => {
+        this.props.actionGetCharacterStarships(vehicle).then(res => {
+          characterStarshipsList.push(res.name);
+          this.setState({
+            characterStarshipsList
+          });
+        });
+      });
     });
-  }
+  };
+
+  handleTabClick = (_, clickedTabLabel) => {
+    if (clickedTabLabel)
+      this.setState({
+        selectedTab: clickedTabLabel
+      });
+  };
 
   render() {
     const { classes, history, location } = this.props;
     const {
       characterHomeWorld,
       characterDetails,
-      characterFilmsList
+      characterFilmsList,
+      characterSpeciesList,
+      characterVehiclesList,
+      characterStarshipsList,
+      selectedTab
     } = this.state;
     return (
       <>
         <Header location={location} history={history} />
         <Logo />
-        <Container className={classes.detailsContainer} maxWidth="md">
-          <Typography
-            className={classes.characterTitle}
-            component="h2"
-            variant="h4"
-          >
-            {characterDetails.name}
-          </Typography>
-          <Typography component="h2" variant="h4">
-            Description
-          </Typography>
-          <Typography
-            color="textSecondary"
-            className={classes.characterHeight}
-            component="h2"
-            variant="h6"
-          >
-            <span style={{ fontWeight: 'bold' }}>Height:</span>{' '}
-            {characterDetails.height} cm
-          </Typography>
-          <Typography
-            className={classes.personWeight}
-            component="h2"
-            variant="h6"
-            color="textSecondary"
-          >
-            <span style={{ fontWeight: 'bold' }}>Weight:</span>{' '}
-            {characterDetails.mass} kg
-          </Typography>
-          <Typography
-            className={classes.personWeight}
-            component="h2"
-            variant="h6"
-            color="textSecondary"
-          >
-            <span style={{ fontWeight: 'bold' }}>Hair Color:</span>{' '}
-            {characterDetails.hair_color}
-          </Typography>
-          <Typography
-            className={classes.personWeight}
-            component="h2"
-            variant="h6"
-            color="textSecondary"
-          >
-            <span style={{ fontWeight: 'bold' }}>Skin Color:</span>{' '}
-            {characterDetails.skin_color}
-          </Typography>
-          <Typography
-            className={classes.personWeight}
-            component="h2"
-            variant="h6"
-            color="textSecondary"
-          >
-            <span style={{ fontWeight: 'bold' }}>Eye Color:</span>{' '}
-            {characterDetails.eye_color}
-          </Typography>
-          <Typography
-            className={classes.personWeight}
-            component="h2"
-            variant="h6"
-            color="textSecondary"
-          >
-            <span style={{ fontWeight: 'bold' }}>Birth Year:</span>{' '}
-            {characterDetails.birth_year}
-          </Typography>
-          <Typography
-            className={classes.personWeight}
-            component="h2"
-            variant="h6"
-            color="textSecondary"
-          >
-            <span style={{ fontWeight: 'bold' }}>Films Featured In:</span>{' '}
+        <Container maxWidth="md" className={classes.detailsContainer}>
+          <div className="container__header">
+            <Typography
+              className={classes.characterTitle}
+              component="h2"
+              variant="h4"
+            >
+              {characterDetails.name}
+            </Typography>
+
+            <CharacterSpecies species={characterSpeciesList} />
+          </div>
+
+          <Paper className={classes.tabContainer} square>
+            <Tabs
+              value={selectedTab}
+              onChange={this.handleTabClick}
+              indicatorColor="secondary"
+            >
+              <Tab
+                className={`${
+                  selectedTab === 'description' ? 'active-tab' : ''
+                }`}
+                value="description"
+                label="Description"
+              />
+              <Tab
+                className={`${selectedTab === 'films' ? 'active-tab' : ''}`}
+                value="films"
+                label="Films Featured In"
+              />
+              <Tab
+                className={`${selectedTab === 'vehicles' ? 'active-tab' : ''}`}
+                value="vehicles"
+                label="Vehicles"
+              />
+              <Tab
+                className={`${selectedTab === 'starships' ? 'active-tab' : ''}`}
+                value="starships"
+                label="Starships"
+              />
+            </Tabs>
+          </Paper>
+
+          {selectedTab === 'description' ? (
+            <CharacterDescription characterDetails={characterDetails} />
+          ) : (
+            ''
+          )}
+
+          {selectedTab === 'films' ? (
             <CharacterFilms films={characterFilmsList} />
-          </Typography>
+          ) : (
+            ''
+          )}
+
+          {selectedTab === 'vehicles' ? (
+            <CharacterVehicles vehicles={characterVehiclesList} />
+          ) : (
+            ''
+          )}
+
+          {selectedTab === 'starships' ? (
+            <CharacterStarships starships={characterStarshipsList} />
+          ) : (
+            ''
+          )}
 
           <Divider />
+        </Container>
+        <Container maxWidth="md" className={classes.detailsContainer}>
           <Homeworld characterHomeWorld={characterHomeWorld} />
         </Container>
       </>
@@ -172,13 +240,18 @@ const mapDispatchToProps = dispatch => {
   return bindActionCreators(
     {
       actionGetPersonDetails,
-      actionGetCharacterFilms
+      actionGetCharacterFilms,
+      actionGetCharacterSpecies,
+      actionGetCharacterVehicles,
+      actionGetCharacterStarships
     },
     dispatch
   );
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(withStyles(styles)(PersonDetails));
+export default withRouter(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(withStyles(styles)(PersonDetails))
+);

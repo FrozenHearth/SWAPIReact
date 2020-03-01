@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
 import Header from '../common/Header';
 import PersonsList from './PersonsList';
 import { bindActionCreators } from 'redux';
@@ -59,4 +60,6 @@ const mapDispatchToProps = dispatch => {
   );
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Persons);
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(Persons)
+);
