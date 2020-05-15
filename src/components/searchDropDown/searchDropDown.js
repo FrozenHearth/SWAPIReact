@@ -15,7 +15,7 @@ const styles = {
     backgroundColor: '#fff'
   },
   characterName: {
-    color: 'black !important'
+    color: '#000 !important'
   },
   itemLink: {
     textDecoration: 'none'
@@ -27,7 +27,7 @@ class SearchDropDown extends Component {
     const { classes, searchResults } = this.props;
     return (
       <div
-        className={searchResults.length ? 'search-results-container' : 'none'}
+        className={searchResults.length > 0 ? 'search-results-container' : 'none'}
       >
         {searchResults.length
           ? searchResults.map((item, index) => (
