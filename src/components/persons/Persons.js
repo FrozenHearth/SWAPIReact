@@ -9,12 +9,9 @@ import { Logo } from '../common/Logo';
 
 class Persons extends Component {
   _isMounted = false;
-  constructor(props) {
-    super(props);
-    this.state = {
+    state = {
       people: []
     };
-  }
 
   componentDidMount() {
     this._isMounted = true;
