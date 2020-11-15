@@ -53,7 +53,6 @@ class Header extends Component {
     const { history, location } = this.props;
     if (location) {
       history.push('/');
-      // Navigate to the homepage, only if not on the homepage. Otherwise, do nothing
     } else {
       return;
     }
